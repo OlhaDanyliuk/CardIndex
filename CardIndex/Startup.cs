@@ -1,7 +1,11 @@
+using DAL;
+using DAL.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,7 +29,16 @@ namespace CardIndex
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
             services.AddControllers();
+            string connectionString = "server=.;database=CardIndexDb;trusted_connection=true;"; //Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<CardDbContext>(o =>
+                o.UseSqlServer(connectionString, b => b.MigrationsAssembly("DAL")));
+
+            services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
+                    .AddRoles<IdentityRole<long>>()
+                    .AddRoleManager<RoleManager<IdentityRole<long>>>()
+                    .AddEntityFrameworkStores<CardDbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

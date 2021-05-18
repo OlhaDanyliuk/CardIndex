@@ -1,0 +1,12 @@
+D:\study\Epam\Projects\FinalTask\CardIndex\DAL\bin\Debug\netcoreapp3.1\DAL.deps.json
+D:\study\Epam\Projects\FinalTask\CardIndex\DAL\bin\Debug\netcoreapp3.1\DAL.dll
+D:\study\Epam\Projects\FinalTask\CardIndex\DAL\bin\Debug\netcoreapp3.1\DAL.pdb
+D:\study\Epam\Projects\FinalTask\CardIndex\DAL\obj\Debug\netcoreapp3.1\DAL.csprojAssemblyReference.cache
+D:\study\Epam\Projects\FinalTask\CardIndex\DAL\obj\Debug\netcoreapp3.1\DAL.AssemblyInfoInputs.cache
+D:\study\Epam\Projects\FinalTask\CardIndex\DAL\obj\Debug\netcoreapp3.1\DAL.AssemblyInfo.cs
+D:\study\Epam\Projects\FinalTask\CardIndex\DAL\obj\Debug\netcoreapp3.1\DAL.csproj.CoreCompileInputs.cache
+D:\study\Epam\Projects\FinalTask\CardIndex\DAL\obj\Debug\netcoreapp3.1\DAL.dll
+D:\study\Epam\Projects\FinalTask\CardIndex\DAL\obj\Debug\netcoreapp3.1\DAL.pdb
+D:\study\Epam\Projects\FinalTask\CardIndex\DAL\bin\Debug\netcoreapp3.1\DAL.runtimeconfig.json
+D:\study\Epam\Projects\FinalTask\CardIndex\DAL\bin\Debug\netcoreapp3.1\DAL.runtimeconfig.dev.json
+D:\study\Epam\Projects\FinalTask\CardIndex\DAL\obj\Debug\netcoreapp3.1\DAL.genruntimeconfig.cache

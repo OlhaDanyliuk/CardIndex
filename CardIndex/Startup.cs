@@ -31,7 +31,7 @@ namespace CardIndex
         {
             
             services.AddControllers();
-            string connectionString = "server=.;database=CardIndexDb;trusted_connection=true;"; //Configuration.GetConnectionString("DefaultConnection");
+            string connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<CardDbContext>(o =>
                 o.UseSqlServer(connectionString, b => b.MigrationsAssembly("DAL")));
 

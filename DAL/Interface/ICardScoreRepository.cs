@@ -11,6 +11,6 @@ namespace DAL.Interface
     {
         IQueryable<CardScore> GetAllWithDetails();
 
-        Task<CardScore> GetByIdWithDetailsAsync(int id);
+        Task<CardScore> GetByIdWithDetailsAsync(long id);
     }
 }

@@ -25,7 +25,7 @@ namespace DAL.Repositories
             throw new NotImplementedException();
         }
 
-        public Task DeleteByIdAsync(int id)
+        public Task DeleteByIdAsync(long id)
         {
             throw new NotImplementedException();
         }
@@ -35,7 +35,7 @@ namespace DAL.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Assessment> GetByIdAsync(int id)
+        public Task<Assessment> GetByIdAsync(long id)
         {
             throw new NotImplementedException();
         }

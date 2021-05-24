@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repositories
 {
@@ -17,47 +18,52 @@ namespace DAL.Repositories
         }
         public Task AddAsync(Category entity)
         {
-            throw new NotImplementedException();
+            _dbContext.Categories.AddAsync(entity);
+            return _dbContext.SaveChangesAsync();
         }
 
         public void Delete(Category entity)
         {
-            throw new NotImplementedException();
+            _dbContext.Categories.Remove(entity);
+            _dbContext.SaveChanges();
         }
 
-        public Task DeleteByIdAsync(int id)
+        public Task DeleteByIdAsync(long id)
         {
-            throw new NotImplementedException();
+            _dbContext.Categories.AddAsync(_dbContext.Categories.Find(id));
+            return _dbContext.SaveChangesAsync();
         }
 
         public IQueryable<Category> GetAll()
         {
-            throw new NotImplementedException();
+            return _dbContext.Categories.AsQueryable();
         }
 
         public IQueryable<Category> GetAllWithDetails()
         {
-            throw new NotImplementedException();
+            return _dbContext.Categories.Include(x => x.Cards).AsQueryable();
         }
 
-        public Task<Category> GetByIdAsync(int id)
+        public Task<Category> GetByIdAsync(long id)
         {
-            throw new NotImplementedException();
+            return _dbContext.Categories.FindAsync(id).AsTask();
         }
 
-        public Task<Card> GetByIdWithDetailsAsync(int id)
+        public Task<Category> GetByIdWithDetailsAsync(long id)
         {
-            throw new NotImplementedException();
+            return _dbContext.Categories.Include(x => x.Cards).FirstAsync(x => x.Id == id);
         }
+    
 
-        public IQueryable<Card> GetCardByCategoryId()
+        public IQueryable<Card> GetCardByCategoryId(long id)
         {
-            throw new NotImplementedException();
+            return _dbContext.Categories.Include(x => x.Cards).First(x=>x.Id==id).Cards.AsQueryable();
         }
 
         public void Update(Category entity)
         {
-            throw new NotImplementedException();
+            _dbContext.Categories.Update(entity);
+            _dbContext.SaveChanges();
         }
     }
 }

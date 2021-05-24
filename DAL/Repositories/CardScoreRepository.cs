@@ -25,7 +25,7 @@ namespace DAL.Repositories
             throw new NotImplementedException();
         }
 
-        public Task DeleteByIdAsync(int id)
+        public Task DeleteByIdAsync(long id)
         {
             throw new NotImplementedException();
         }
@@ -40,12 +40,12 @@ namespace DAL.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<CardScore> GetByIdAsync(int id)
+        public Task<CardScore> GetByIdAsync(long id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<CardScore> GetByIdWithDetailsAsync(int id)
+        public Task<CardScore> GetByIdWithDetailsAsync(long id)
         {
             throw new NotImplementedException();
         }

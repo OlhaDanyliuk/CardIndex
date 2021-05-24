@@ -11,8 +11,6 @@ namespace DAL.Interface
     {
 
         IQueryable<Category> GetAllWithDetails();
-        IQueryable<Card> GetCardByCategoryId();
-
-        Task<Card> GetByIdWithDetailsAsync(int id);
+        IQueryable<Card> GetCardByCategoryId(long id);
     }
 }

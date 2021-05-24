@@ -13,6 +13,7 @@ namespace DAL
         private CardRepository cardRepository;
         private CategoryRepository categoryRepository;
         private CardScoreRepository cardScoreRepository;
+        private UserRepository userRepository;
         public UnitOfWorks(CardDbContext context)
         {
             _context = context;
@@ -21,6 +22,7 @@ namespace DAL
         public ICardRepository CardRepository => cardRepository = cardRepository ?? new CardRepository(_context);
         public ICategoryRepository CategoryRepository => categoryRepository = categoryRepository ?? new CategoryRepository(_context);
         public ICardScoreRepository CardScoreRepository =>cardScoreRepository = cardScoreRepository ?? new CardScoreRepository(_context);
+        public IUserRepository UserRepository => userRepository = userRepository ?? new UserRepository(_context);
 
         public Task<int> SaveAsync()
         {

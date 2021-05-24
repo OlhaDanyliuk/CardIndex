@@ -27,7 +27,7 @@ namespace DAL.Repositories
             _context.SaveChangesAsync();
         }
 
-        public Task DeleteByIdAsync(int id)
+        public Task DeleteByIdAsync(long id)
         {
             _context.Set<TEntity>().Remove(_context.Set<TEntity>().Find(id));
             return _context.SaveChangesAsync();
@@ -38,7 +38,7 @@ namespace DAL.Repositories
             return _context.Set<TEntity>().AsQueryable();
         }
 
-        public Task<TEntity> GetByIdAsync(int id)
+        public Task<TEntity> GetByIdAsync(long id)
         {
             return _context.Set<TEntity>().FindAsync(id).AsTask();
         }

@@ -19,26 +19,6 @@ namespace DAL.Migrations
                 .HasAnnotation("ProductVersion", "5.0.6")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("DAL.Entities.Assessment", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long?>("CardScoreId")
-                        .HasColumnType("bigint");
-
-                    b.Property<double>("Score")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CardScoreId");
-
-                    b.ToTable("Assessments");
-                });
-
             modelBuilder.Entity("DAL.Entities.Card", b =>
                 {
                     b.Property<long>("Id")
@@ -72,13 +52,18 @@ namespace DAL.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("Assessment")
+                        .HasColumnType("int");
+
                     b.Property<long>("CardId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CardId")
-                        .IsUnique();
+                    b.HasIndex("CardId");
 
                     b.ToTable("CardScores");
                 });
@@ -295,13 +280,6 @@ namespace DAL.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("DAL.Entities.Assessment", b =>
-                {
-                    b.HasOne("DAL.Entities.CardScore", null)
-                        .WithMany("Assessment")
-                        .HasForeignKey("CardScoreId");
-                });
-
             modelBuilder.Entity("DAL.Entities.Card", b =>
                 {
                     b.HasOne("DAL.Entities.Category", "Category")
@@ -313,13 +291,11 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Entities.CardScore", b =>
                 {
-                    b.HasOne("DAL.Entities.Card", "Card")
-                        .WithOne("Assessment")
-                        .HasForeignKey("DAL.Entities.CardScore", "CardId")
+                    b.HasOne("DAL.Entities.Card", null)
+                        .WithMany("Assessment")
+                        .HasForeignKey("CardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Card");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
@@ -374,11 +350,6 @@ namespace DAL.Migrations
                 });
 
             modelBuilder.Entity("DAL.Entities.Card", b =>
-                {
-                    b.Navigation("Assessment");
-                });
-
-            modelBuilder.Entity("DAL.Entities.CardScore", b =>
                 {
                     b.Navigation("Assessment");
                 });

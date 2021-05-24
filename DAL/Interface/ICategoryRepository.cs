@@ -9,7 +9,6 @@ namespace DAL.Interface
 {
     public interface ICategoryRepository:IRepository<Category>
     {
-
         IQueryable<Category> GetAllWithDetails();
         IQueryable<Card> GetCardByCategoryId(long id);
     }

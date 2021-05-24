@@ -9,8 +9,6 @@ namespace DAL.Interface
 {
     public interface ICardScoreRepository:IRepository<CardScore>
     {
-        IQueryable<CardScore> GetAllWithDetails();
-
-        Task<CardScore> GetByIdWithDetailsAsync(long id);
+        
     }
 }

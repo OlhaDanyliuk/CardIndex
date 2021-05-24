@@ -17,42 +17,37 @@ namespace DAL.Repositories
         }
         public Task AddAsync(CardScore entity)
         {
-            throw new NotImplementedException();
+            _dbContext.CardScores.AddAsync(entity);
+            return _dbContext.SaveChangesAsync();
         }
 
         public void Delete(CardScore entity)
         {
-            throw new NotImplementedException();
+            _dbContext.CardScores.Remove(entity);
+            _dbContext.SaveChanges();
         }
 
         public Task DeleteByIdAsync(long id)
         {
-            throw new NotImplementedException();
+            _dbContext.CardScores.Remove(_dbContext.CardScores.Find(id));
+            return _dbContext.SaveChangesAsync();
         }
 
         public IQueryable<CardScore> GetAll()
         {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<CardScore> GetAllWithDetails()
-        {
-            throw new NotImplementedException();
+            return _dbContext.CardScores.AsQueryable();
         }
 
         public Task<CardScore> GetByIdAsync(long id)
         {
-            throw new NotImplementedException();
+            return _dbContext.CardScores.FindAsync(id).AsTask();
         }
 
-        public Task<CardScore> GetByIdWithDetailsAsync(long id)
-        {
-            throw new NotImplementedException();
-        }
 
         public void Update(CardScore entity)
         {
-            throw new NotImplementedException();
+            _dbContext.CardScores.Update(entity);
+            _dbContext.SaveChanges();
         }
     }
 }

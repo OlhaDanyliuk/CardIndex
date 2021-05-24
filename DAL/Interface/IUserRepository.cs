@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DAL.Interface
 {
-    interface IAssessmentRepository:IRepository<Assessment>
+    public interface IUserRepository:IRepository<User>
     {
     }
 }

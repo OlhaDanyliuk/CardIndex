@@ -19,7 +19,6 @@ namespace DAL
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Card> Cards { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
-        public virtual DbSet<Assessment> Assessments { get; set; }
         public virtual DbSet<CardScore> CardScores { get; set; }
     }
 }

@@ -9,5 +9,8 @@ namespace DAL.Interface
 {
     public interface ICardRepository: IRepository<Card>
     {
+        double GetAverageScoreByCardId(long id);
+        IQueryable<Card> GetAllWithDetails();
+        Card GetWithDetailsById(long id);
     }
 }

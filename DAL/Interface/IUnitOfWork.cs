@@ -9,6 +9,7 @@ namespace DAL.Interface
     {
         ICardRepository CardRepository { get; }
         ICategoryRepository CategoryRepository { get; }
+        IUserRepository UserRepository { get; }
         ICardScoreRepository CardScoreRepository { get; }
 
         Task<int> SaveAsync();

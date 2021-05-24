@@ -70,3 +70,4 @@ D:\study\Epam\Projects\FinalTask\CardIndex\CardIndex\bin\Debug\netcoreapp3.1\BLL
 D:\study\Epam\Projects\FinalTask\CardIndex\CardIndex\bin\Debug\netcoreapp3.1\BLL.pdb
 D:\study\Epam\Projects\FinalTask\CardIndex\CardIndex\bin\Debug\netcoreapp3.1\Humanizer.dll
 D:\study\Epam\Projects\FinalTask\CardIndex\CardIndex\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll
+D:\study\Epam\Projects\FinalTask\CardIndex\CardIndex\bin\Debug\netcoreapp3.1\AutoMapper.dll

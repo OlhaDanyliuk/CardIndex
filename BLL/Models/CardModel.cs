@@ -10,7 +10,7 @@ namespace BLL.Models
         public string Name { get; set; }
         public string Text { get; set; }
         public double? AverageScore { get; set; }
-        public ICollection<long> CardScoresIds { get; set; }
+        public ICollection<long>? CardScoresIds { get; set; }
         public long CategoryId { get; set; }
         
     }

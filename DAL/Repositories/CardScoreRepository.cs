@@ -17,7 +17,7 @@ namespace DAL.Repositories
         }
         public Task AddAsync(CardScore entity)
         {
-            _dbContext.CardScores.AddAsync(entity);
+            _dbContext.CardScores.Add(entity);
             return _dbContext.SaveChangesAsync();
         }
 

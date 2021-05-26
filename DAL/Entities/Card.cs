@@ -11,7 +11,7 @@ namespace DAL.Entities
         public string Text { get; set; }
         public double? AverageScore { get; set; }
 
-        public virtual ICollection<CardScore> Assessment { get; set; }
-        public virtual Category Category { get; set; }
+        public virtual ICollection<CardScore>? Assessment { get; set; }
+        public virtual Category? Category { get; set; }
     }
 }

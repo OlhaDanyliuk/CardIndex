@@ -17,7 +17,7 @@ namespace DAL.Repositories
         }
         public Task AddAsync(TEntity entity)
         {
-            _context.Set<TEntity>().AddAsync(entity);
+            _context.Set<TEntity>().Add(entity);
             return _context.SaveChangesAsync();
         }
 

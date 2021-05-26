@@ -22,18 +22,17 @@ namespace BLL.Services
             _repository = unitOfWork;
         }
 
-        public Task AddAsync(CardModel model)
+        public async Task AddAsync(CardModel model)
         {
-            try
-            {
+            
                 Card _model = _mapper.Map<Card>(model);
-                _repository.CardRepository.AddAsync(_model);
-                return _repository.SaveAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new CardIndexException(ex.Message);
-            }
+                 _repository.CardRepository.AddAsync(_model);
+                await _repository.SaveAsync();
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new CardIndexException(ex.Message);
+            //}
         }
 
         public Task DeleteByIdAsync(int modelId)

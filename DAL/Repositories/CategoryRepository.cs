@@ -18,7 +18,7 @@ namespace DAL.Repositories
         }
         public Task AddAsync(Category entity)
         {
-            _dbContext.Categories.AddAsync(entity);
+            _dbContext.Categories.Add(entity);
             return _dbContext.SaveChangesAsync();
         }
 
@@ -30,7 +30,7 @@ namespace DAL.Repositories
 
         public Task DeleteByIdAsync(long id)
         {
-            _dbContext.Categories.AddAsync(_dbContext.Categories.Find(id));
+            _dbContext.Categories.Remove(_dbContext.Categories.Find(id));
             return _dbContext.SaveChangesAsync();
         }
 

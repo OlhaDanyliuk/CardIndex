@@ -16,10 +16,22 @@ namespace DAL.Repositories
         {
             _dbContext = dbContext;
         }
-        public Task AddAsync(Card entity)
+        public async Task AddAsync(Card entity)
         {
-            _dbContext.Cards.AddAsync(entity);
-            return _dbContext.SaveChangesAsync();
+            var category = _dbContext.Categories.AsNoTracking().First(x => x.Id == entity.Category.Id);
+            entity.Category = category;
+            await _dbContext.Cards.AddAsync(entity);
+            await _dbContext.SaveChangesAsync();
+        }
+        public void Add(Card entity)
+        {
+            var category = _dbContext.Categories.AsNoTracking().First(x => x.Id == entity.Category.Id);
+            entity.Category = category;
+            _dbContext.Cards.Add(new Card { Id=entity.Id, Name=entity.Name, Text=entity.Text, Category=category });
+
+            //_dbContext.Entry(entity).State = EntityState.Added;
+            var result =_dbContext.SaveChanges();
+            //return result;
         }
 
         public void Delete(Card entity)

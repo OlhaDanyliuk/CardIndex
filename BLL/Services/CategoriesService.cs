@@ -22,13 +22,12 @@ namespace BLL.Services
             _mapper = mapper;
             _repository = unitOfWork;
         }
-        public Task AddAsync(CategoryModel model)
+        public async Task AddAsync(CategoryModel model)
         {
             try
             {
                 Category _model = _mapper.Map<Category>(model);
-                _repository.CategoryRepository.AddAsync(_model);
-                return _repository.SaveAsync();
+                await _repository.CategoryRepository.AddAsync(_model);
             }
             catch (Exception ex)
             {
@@ -36,10 +35,9 @@ namespace BLL.Services
             }
         }
 
-        public Task DeleteByIdAsync(int modelId)
+        public async Task DeleteByIdAsync(int modelId)
         {
-            _repository.CategoryRepository.DeleteByIdAsync(modelId);
-            return _repository.SaveAsync();
+            await _repository.CategoryRepository.DeleteByIdAsync(modelId);
         }
 
         public IEnumerable<CategoryModel> GetAll()

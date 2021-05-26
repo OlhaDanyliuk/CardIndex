@@ -12,5 +12,6 @@ namespace DAL.Interface
         double GetAverageScoreByCardId(long id);
         IQueryable<Card> GetAllWithDetails();
         Card GetWithDetailsById(long id);
+        void Add(Card card);
     }
 }

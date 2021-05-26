@@ -22,24 +22,23 @@ namespace BLL.Services
             _repository = unitOfWork;
         }
 
-        public Task AddAsync(UserModel model)
+        public async Task AddAsync(UserModel model)
         {
             try
             {
                 User _model = _mapper.Map<User>(model);
                 _repository.UserRepository.AddAsync(_model);
-                return _repository.SaveAsync();
+                await _repository.SaveAsync();
             }
             catch (Exception ex)
             {
                 throw new CardIndexException(ex.Message);
             }
         }
-        public Task DeleteByIdAsync(int modelId)
+        public async Task DeleteByIdAsync(int modelId)
         {
             if (_repository.UserRepository.GetAll().Any(x => x.Id == modelId)) throw new CardIndexException();
-            _repository.UserRepository.DeleteByIdAsync(modelId);
-            return _repository.SaveAsync();
+            await _repository.UserRepository.DeleteByIdAsync(modelId);
         }
 
         public IEnumerable<UserModel> GetAll()

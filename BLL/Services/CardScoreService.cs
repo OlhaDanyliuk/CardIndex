@@ -22,13 +22,12 @@ namespace BLL.Services
             _repository = unitOfWork;
         }
 
-        public Task AddAsync(CardScoreModel model)
+        public async  Task AddAsync(CardScoreModel model)
         {
             try
             {
                 CardScore _model = _mapper.Map<CardScore>(model);
-                _repository.CardScoreRepository.AddAsync(_model);
-                return _repository.SaveAsync();
+                await _repository.CardScoreRepository.AddAsync(_model);
             }
             catch (Exception ex)
             {
@@ -36,11 +35,10 @@ namespace BLL.Services
             }
         }
 
-        public Task DeleteByIdAsync(int modelId)
+        public async Task DeleteByIdAsync(int modelId)
         {
             if (_repository.CardScoreRepository.GetAll().Any(x => x.Id == modelId)) throw new CardIndexException();
-            _repository.CardScoreRepository.DeleteByIdAsync(modelId);
-            return _repository.SaveAsync();
+            await _repository.CardScoreRepository.DeleteByIdAsync(modelId);
         }
 
         public IEnumerable<CardScoreModel> GetAll()

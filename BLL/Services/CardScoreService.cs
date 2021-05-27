@@ -35,6 +35,11 @@ namespace BLL.Services
             }
         }
 
+        public int Count()
+        {
+           return _repository.CardScoreRepository.GetAll().Count();
+        }
+
         public async Task DeleteByIdAsync(int modelId)
         {
             if (_repository.CardScoreRepository.GetAll().Any(x => x.Id == modelId)) throw new CardIndexException();

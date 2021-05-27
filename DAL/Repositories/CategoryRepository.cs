@@ -15,6 +15,16 @@ namespace DAL.Repositories
         public CategoryRepository(CardDbContext dbContext)
         {
             _dbContext = dbContext;
+            SetDB();
+        }
+        private void SetDB()
+        {
+            var list = _dbContext.Categories.ToList();
+            foreach (var item in list)
+            {
+                _dbContext.Entry(item).Collection(x => x.Cards).Load();
+            }
+            _dbContext.SaveChanges();
         }
         public Task AddAsync(Category entity)
         {

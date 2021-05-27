@@ -73,5 +73,9 @@ namespace BLL.Services
             _repository.CategoryRepository.Update(_mapper.Map<CategoryModel, Category>(model));
             return _repository.SaveAsync();
         }
+        public int Count()
+        {
+            return _repository.CategoryRepository.GetAll().Count();
+        }
     }
 }

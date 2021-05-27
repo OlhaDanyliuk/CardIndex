@@ -60,5 +60,10 @@ namespace BLL.Services
             _repository.UserRepository.Update(_mapper.Map<User>(model));
             return _repository.SaveAsync();
         }
+
+        public int Count()
+        {
+            return _repository.UserRepository.GetAll().Count();
+        }
     }
 }

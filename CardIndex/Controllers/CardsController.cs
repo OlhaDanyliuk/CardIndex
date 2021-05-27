@@ -55,7 +55,7 @@ namespace PL.Controllers
             try
             {
                 await _cardService.AddAsync(model);
-                return Ok();
+                return CreatedAtAction(nameof(GetById), new { id = model.Id }, model);
             }
             catch (CardIndexException ex)
             {

@@ -54,6 +54,7 @@ namespace PL.Controllers
         {
             try
             {
+                model.Id = _categoriesService.Count() + 1;
                 await _categoriesService.AddAsync(model);
                 return Ok();
             }

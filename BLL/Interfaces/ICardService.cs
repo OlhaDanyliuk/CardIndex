@@ -10,5 +10,6 @@ namespace BLL.Interfaces
         double GetAverageScoreByCardId(long id);
         ICollection<CardModel> GetAllWithDetails();
         CardModel GetWithDetailsById(long id);
+
     }
 }

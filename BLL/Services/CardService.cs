@@ -25,8 +25,9 @@ namespace BLL.Services
         public async Task AddAsync(CardModel model)
         {
             
-                Card _model = _mapper.Map<Card>(model);
-                 _repository.CardRepository.AddAsync(_model);
+                Card _model = _mapper.Map< Card>(model);
+                _model.Category = _repository.CategoryRepository.GetByIdAsync(model.CategoryId).Result;
+                await _repository.CardRepository.AddAsync(_model);
                 await _repository.SaveAsync();
             //}
             //catch (Exception ex)
@@ -35,11 +36,11 @@ namespace BLL.Services
             //}
         }
 
-        public Task DeleteByIdAsync(int modelId)
+        public async Task DeleteByIdAsync(int modelId)
         {
-            if (_repository.CardRepository.GetAll().Any(x => x.Id == modelId)) throw new CardIndexException();
-            _repository.CardRepository.DeleteByIdAsync(modelId);
-            return _repository.SaveAsync();
+            if (_repository.CardRepository.GetAll().First(x => x.Id == modelId)==null) throw new CardIndexException();
+            await _repository.CardRepository.DeleteByIdAsync(modelId);
+            await _repository.SaveAsync();
         }
 
         public IEnumerable<CardModel> GetAll()
@@ -76,6 +77,10 @@ namespace BLL.Services
             //if (String.IsNullOrEmpty(model.) || String.IsNullOrEmpty(model.Author) || model.Year > DateTime.Now.Year) throw new LibraryException();
             _repository.CardRepository.Update(_mapper.Map<Card>(model));
             return _repository.SaveAsync();
+        }
+        public int Count()
+        {
+            return _repository.CardRepository.GetAll().Count();
         }
     }
 }

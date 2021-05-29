@@ -40,7 +40,7 @@ namespace BLL.Services
            return _repository.CardScoreRepository.GetAll().Count();
         }
 
-        public async Task DeleteByIdAsync(int modelId)
+        public async Task DeleteByIdAsync(long modelId)
         {
             if (_repository.CardScoreRepository.GetAll().Any(x => x.Id == modelId)) throw new CardIndexException();
             await _repository.CardScoreRepository.DeleteByIdAsync(modelId);
@@ -54,7 +54,7 @@ namespace BLL.Services
             return result;
         }
 
-        public Task<CardScoreModel> GetByIdAsync(int id)
+        public Task<CardScoreModel> GetByIdAsync(long id)
         {
             var result = _mapper.Map<CardScore, CardScoreModel>(_repository.CardScoreRepository.GetByIdAsync(id).Result);
             return Task.FromResult<CardScoreModel>(result);

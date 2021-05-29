@@ -24,21 +24,21 @@ namespace BLL.Services
 
         public async Task AddAsync(CardModel model)
         {
-            
+            try { 
                 Card _model = _mapper.Map< Card>(model);
-                _model.Category = _repository.CategoryRepository.GetByIdAsync(model.CategoryId).Result;
+                //_model.Category = _repository.CategoryRepository.GetByIdAsync(model.CategoryId).Result;
                 await _repository.CardRepository.AddAsync(_model);
                 await _repository.SaveAsync();
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new CardIndexException(ex.Message);
-            //}
+            }
+            catch (Exception ex)
+            {
+                throw new CardIndexException(ex.Message);
+            }
         }
 
-        public async Task DeleteByIdAsync(int modelId)
+        public async Task DeleteByIdAsync(long modelId)
         {
-            if (_repository.CardRepository.GetAll().First(x => x.Id == modelId)==null) throw new CardIndexException();
+            if (_repository.CardRepository.GetAll().FirstOrDefault(x => x.Id == modelId)==null) throw new CardIndexException("Card not found!");
             await _repository.CardRepository.DeleteByIdAsync(modelId);
             await _repository.SaveAsync();
         }
@@ -46,6 +46,7 @@ namespace BLL.Services
         public IEnumerable<CardModel> GetAll()
         {
             var cards = _repository.CardRepository.GetAll();
+            if (cards.Count() == 0) throw new CardIndexException("Cards not found!");
             var result = (from b in cards
                           select _mapper.Map<Card, CardModel>(b)).ToList();
             return result;
@@ -53,28 +54,34 @@ namespace BLL.Services
 
         public ICollection<CardModel> GetAllWithDetails()
         {
+            if (_repository.CardRepository.GetAll() == null) throw new CardIndexException("Cards not found!");
             return _repository.CardRepository.GetAllWithDetails().Select(x=>_mapper.Map<CardModel>(x)).ToList();
         }
 
         public double GetAverageScoreByCardId(long id)
         {
+            if (_repository.CardRepository.GetAll().FirstOrDefault(x => x.Id == id) == null) throw new CardIndexException("Card not found!");
             return _repository.CardRepository.GetAverageScoreByCardId(id);
         }
 
-        public Task<CardModel> GetByIdAsync(int id)
+        public Task<CardModel> GetByIdAsync(long id)
         {
+            if (_repository.CardRepository.GetAll().FirstOrDefault(x => x.Id == id) == null) throw new CardIndexException("Card not found!");
             var result = _mapper.Map<Card, CardModel>(_repository.CardRepository.GetByIdAsync(id).Result);
             return Task.FromResult<CardModel>(result);
         }
 
         public CardModel GetWithDetailsById(long id)
         {
+            if (_repository.CardRepository.GetAll().FirstOrDefault(x => x.Id == id) == null) throw new CardIndexException("Card not found!");
             return _mapper.Map<CardModel>(_repository.CardRepository.GetWithDetailsById(id));
         }
 
         public Task UpdateAsync(CardModel model)
         {
-            //if (String.IsNullOrEmpty(model.) || String.IsNullOrEmpty(model.Author) || model.Year > DateTime.Now.Year) throw new LibraryException();
+            if (String.IsNullOrEmpty(model.Name) || String.IsNullOrEmpty(model.Text) || model.CategoryId == 0 ) throw new CardIndexException("Inccorect card model data");
+            if (model.CategoryId != 0 && _repository.CategoryRepository.GetAll().FirstOrDefault(x=>x.Id==model.CategoryId)==null) throw new CardIndexException("Category not found");
+            if(_repository.CardRepository.GetByIdAsync(model.Id).Result==null) throw new CardIndexException("Card not found");
             _repository.CardRepository.Update(_mapper.Map<Card>(model));
             return _repository.SaveAsync();
         }

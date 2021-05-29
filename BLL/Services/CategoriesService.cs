@@ -24,10 +24,12 @@ namespace BLL.Services
         }
         public async Task AddAsync(CategoryModel model)
         {
+            if (_repository.CategoryRepository.GetAll().FirstOrDefault(x => x.Id == model.Id) != null) throw new CardIndexException("Category already exist!");
             try
             {
                 Category _model = _mapper.Map<Category>(model);
                 await _repository.CategoryRepository.AddAsync(_model);
+                await _repository.SaveAsync();
             }
             catch (Exception ex)
             {
@@ -35,14 +37,17 @@ namespace BLL.Services
             }
         }
 
-        public async Task DeleteByIdAsync(int modelId)
+        public async Task DeleteByIdAsync(long modelId)
         {
+            if (_repository.CategoryRepository.GetAll().FirstOrDefault(x => x.Id == modelId) == null) throw new CardIndexException("Category not found!");
             await _repository.CategoryRepository.DeleteByIdAsync(modelId);
+            await _repository.SaveAsync();
         }
 
         public IEnumerable<CategoryModel> GetAll()
         {
             var categories = _repository.CategoryRepository.GetAll();
+            if (categories == null) throw new CardIndexException("Categories not found!");
             var result = (from b in categories
                           select _mapper.Map<Category, CategoryModel>(b)).ToList();
             return result;
@@ -50,19 +55,24 @@ namespace BLL.Services
 
         public ICollection<CategoryModel> GetAllWithDetails()
         {
-            var categories = _repository.CategoryRepository.GetAllWithDetails()
+            var categories = _repository.CategoryRepository.GetAll();
+            if (categories == null) throw new CardIndexException("Categories not found!");
+            var result = _repository.CategoryRepository.GetAllWithDetails()
                 .Select(x => _mapper.Map<Category, CategoryModel>(x)).ToList();
-            return categories;
+            return result;
         }
 
-        public Task<CategoryModel> GetByIdAsync(int id)
+        public Task<CategoryModel> GetByIdAsync(long id)
         {
+            if (_repository.CategoryRepository.GetAll().FirstOrDefault(x => x.Id == id) == null) throw new CardIndexException("Category not found!");
             var result = _mapper.Map<Category, CategoryModel>(_repository.CategoryRepository.GetByIdAsync(id).Result);
             return Task.FromResult<CategoryModel>(result);
         }
 
         public ICollection<CardModel> GetCardByCategoryId(long id)
         {
+            if (_repository.CategoryRepository.GetAll().FirstOrDefault(x => x.Id == id) == null) throw new CardIndexException("Category not found!");
+
             var result =_repository.CategoryRepository.GetCardByCategoryId(id)
                 .Select(x=> _mapper.Map<Card, CardModel>(x)).ToList();
             return result;
@@ -70,6 +80,8 @@ namespace BLL.Services
 
         public Task UpdateAsync(CategoryModel model)
         {
+            if (_repository.CategoryRepository.GetAll().FirstOrDefault(x => x.Id == model.Id) == null) throw new CardIndexException("Category not found!");
+
             _repository.CategoryRepository.Update(_mapper.Map<CategoryModel, Category>(model));
             return _repository.SaveAsync();
         }

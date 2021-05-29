@@ -28,7 +28,7 @@ namespace PL.Controllers
                 var result = _categoriesService.GetAll();
                 return Ok(result);
             }
-            catch (CardIndexException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -42,29 +42,28 @@ namespace PL.Controllers
                 var result = await _categoriesService.GetByIdAsync(id);
                 return Ok(result);
             }
-            catch (CardIndexException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
 
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<ActionResult> Add([FromBody] CategoryModel model)
         {
             try
             {
-                model.Id = _categoriesService.Count() + 1;
                 await _categoriesService.AddAsync(model);
-                return Ok();
+                return CreatedAtAction(nameof(GetById), new { id = model.Id }, model);
             }
-            catch (CardIndexException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
-        [HttpPut]
+        [HttpPut("update")]
         public async Task<ActionResult> Update(CategoryModel cardModel)
         {
             try
@@ -72,12 +71,12 @@ namespace PL.Controllers
                 await _categoriesService.UpdateAsync(cardModel);
                 return Ok();
             }
-            catch (CardIndexException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
-        [HttpDelete("{id}")]
+        [HttpDelete("remove/{id}")]
         public async Task<ActionResult> Delete(int id)
         {
             try
@@ -85,7 +84,7 @@ namespace PL.Controllers
                 await _categoriesService.DeleteByIdAsync(id);
                 return Ok();
             }
-            catch (CardIndexException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

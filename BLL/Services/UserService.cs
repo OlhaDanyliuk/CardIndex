@@ -35,7 +35,7 @@ namespace BLL.Services
                 throw new CardIndexException(ex.Message);
             }
         }
-        public async Task DeleteByIdAsync(int modelId)
+        public async Task DeleteByIdAsync(long modelId)
         {
             if (_repository.UserRepository.GetAll().Any(x => x.Id == modelId)) throw new CardIndexException();
             await _repository.UserRepository.DeleteByIdAsync(modelId);
@@ -49,7 +49,7 @@ namespace BLL.Services
             return result;
         }
 
-        public Task<UserModel> GetByIdAsync(int id)
+        public Task<UserModel> GetByIdAsync(long id)
         {
             var result = _mapper.Map<User, UserModel>(_repository.UserRepository.GetByIdAsync(id).Result);
             return Task.FromResult<UserModel>(result);

@@ -28,7 +28,7 @@ namespace PL.Controllers
                 var result = _cardService.GetAll();
                 return Ok(result);
             }
-            catch (CardIndexException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -42,14 +42,14 @@ namespace PL.Controllers
                 var result = await _cardService.GetByIdAsync(id);
                 return Ok(result);
             }
-            catch (CardIndexException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
 
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<ActionResult> Add([FromBody] CardModel model)
         {
             try
@@ -57,13 +57,13 @@ namespace PL.Controllers
                 await _cardService.AddAsync(model);
                 return CreatedAtAction(nameof(GetById), new { id = model.Id }, model);
             }
-            catch (CardIndexException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
-        [HttpPut]
+        [HttpPut("update")]
         public async Task<ActionResult> Update(CardModel cardModel)
         {
             try
@@ -71,12 +71,12 @@ namespace PL.Controllers
                 await _cardService.UpdateAsync(cardModel);
                 return Ok();
             }
-            catch (CardIndexException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
-        [HttpDelete("{id}")]
+        [HttpDelete("remove/{id}")]
         public async Task<ActionResult> Delete(int id)
         {
             try
@@ -84,7 +84,7 @@ namespace PL.Controllers
                 await _cardService.DeleteByIdAsync(id);
                 return Ok();
             }
-            catch (CardIndexException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

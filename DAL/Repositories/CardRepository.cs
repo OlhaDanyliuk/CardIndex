@@ -16,11 +16,11 @@ namespace DAL.Repositories
         {
             _dbContext = dbContext;
         }
-        
+
         public async Task AddAsync(Card entity)
         {
-             _dbContext.Cards.Add(entity);
-            await  _dbContext.SaveChangesAsync();
+            _dbContext.Cards.Add(entity);
+            await _dbContext.SaveChangesAsync();
         }
         public void Add(Card entity)
         {
@@ -42,12 +42,12 @@ namespace DAL.Repositories
 
         public IQueryable<Card> GetAll()
         {
-            return _dbContext.Cards.AsQueryable();
+            return _dbContext.Cards.Include(x=>x.Category).Include(x=>x.Assessment).AsQueryable();
         }
 
         public IQueryable<Card> GetAllWithDetails()
         {
-            return _dbContext.Cards.Include(x => x.Assessment).AsQueryable();
+            return _dbContext.Cards.Include(x => x.Assessment).Include(x => x.Category).AsQueryable();
         }
 
         public double GetAverageScoreByCardId(long id)
@@ -69,7 +69,19 @@ namespace DAL.Repositories
 
         public void Update(Card entity)
         {
-            _dbContext.Cards.Update(entity);
+            var el = _dbContext.Cards.FirstOrDefault(x=>x.Id==entity.Id);
+            foreach (var proptr in entity.GetType().GetProperties())
+            {
+                var value = proptr.GetValue(entity, null);
+                if (proptr.Name == "Category")
+                {
+                    proptr.SetValue(el, _dbContext.Categories.Find(entity.Category.Id));
+                }
+                else if (proptr.Name != "Id" && value!= proptr.GetValue(el, null))
+                    proptr.SetValue(el, value, null);
+
+            }
+            _dbContext.Entry(el).State = EntityState.Modified;
             _dbContext.SaveChanges();
         }
     }

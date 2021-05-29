@@ -20,7 +20,7 @@ namespace BLL.Validation
 
         public CardIndexException() { }
 
-        public CardIndexException(string message)
+        public CardIndexException(string message):base(message)
         {
             SetMessage(message);
         }

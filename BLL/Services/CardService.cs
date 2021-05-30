@@ -26,7 +26,7 @@ namespace BLL.Services
         {
             try { 
                 Card _model = _mapper.Map< Card>(model);
-                //_model.Category = _repository.CategoryRepository.GetByIdAsync(model.CategoryId).Result;
+                _model.Category = _repository.CategoryRepository.GetByIdAsync(model.CategoryId).Result;
                 await _repository.CardRepository.AddAsync(_model);
                 await _repository.SaveAsync();
             }

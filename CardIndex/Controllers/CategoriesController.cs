@@ -48,6 +48,20 @@ namespace PL.Controllers
             }
         }
 
+        [HttpGet("{id}/cards")]
+        public ActionResult<IEnumerable<CardModel>> GetCardsByCategoryId(int id)
+        {
+            try
+            {
+                var result = _categoriesService.GetCardByCategoryId(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         [HttpPost("create")]
         public async Task<ActionResult> Add([FromBody] CategoryModel model)

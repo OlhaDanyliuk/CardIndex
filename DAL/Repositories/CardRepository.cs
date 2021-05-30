@@ -17,10 +17,10 @@ namespace DAL.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task AddAsync(Card entity)
+        public Task AddAsync(Card entity)
         {
             _dbContext.Cards.Add(entity);
-            await _dbContext.SaveChangesAsync();
+            return _dbContext.SaveChangesAsync();
         }
         public void Add(Card entity)
         {

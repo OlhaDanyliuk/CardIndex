@@ -11,5 +11,6 @@ namespace BLL.Interfaces
         Task<AuthenticationResult> Signup(SignupModel signup);
         AuthenticationResult Login(LoginModel signup);
         IEnumerable<UserModel> GetUsersRole();
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using DAL;
+﻿using BLL.Models;
+using DAL;
 using DAL.Entities;
 using DAL.Interface;
 using Microsoft.AspNetCore.Identity;
@@ -15,10 +16,9 @@ namespace BLL.Configuration
         public static void AddDomainDataServices(this IServiceCollection services, string conectionString)
         {
             services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddRoles<IdentityRole<long>>()
-                .AddRoleManager<RoleManager<IdentityRole<long>>>()
+                .AddRoles<Role>()
+                .AddRoleManager<RoleManager<Role>>()
                 .AddEntityFrameworkStores<CardDbContext>();
-            
 
             services.AddDbContext<CardDbContext>(options =>
             {
@@ -26,6 +26,8 @@ namespace BLL.Configuration
             },
              ServiceLifetime.Transient);
             services.AddTransient<IUnitOfWork, UnitOfWorks>();
+
+
         }
     }
 }

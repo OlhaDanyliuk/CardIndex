@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL
 {
-    public class CardDbContext : IdentityDbContext<User, IdentityRole<long>, long>
+    public class CardDbContext : IdentityDbContext<User, Role, long>
     {
         public CardDbContext()
         {

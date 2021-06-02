@@ -20,16 +20,14 @@ namespace BLL.Services
     public class UserService : IUserService
     {
         private readonly JwtConfig jwtConfig;
-        private readonly UserManager<User> userManager;
 
         private readonly IUnitOfWork _repository;
         private readonly IMapper _mapper;
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper, JwtConfig jwt, UserManager<User> _userManager)
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper, JwtConfig jwt)
         {
             _mapper = mapper;
             _repository = unitOfWork;
             jwtConfig = jwt;
-            userManager = _userManager;
         }
 
         public async Task AddAsync(UserModel model)
@@ -37,7 +35,7 @@ namespace BLL.Services
             try
             {
                 User _model = _mapper.Map<User>(model);
-                await _repository.UserRepository.AddAsync(_model);
+                await _repository.UserManager.CreateAsync(_model);
                 await _repository.SaveAsync();
             }
             catch (Exception ex)
@@ -47,13 +45,14 @@ namespace BLL.Services
         }
         public async Task DeleteByIdAsync(long modelId)
         {
-            if (_repository.UserRepository.GetAll().FirstOrDefault(x => x.Id == modelId)==null) throw new CardIndexException("User not found");
-            await _repository.UserRepository.DeleteByIdAsync(modelId);
+            var user = _repository.UserManager.Users.FirstOrDefault(x => x.Id == modelId);
+            if (user==null) throw new CardIndexException("User not found");
+            await _repository.UserManager.DeleteAsync(user);
         }
 
         public IEnumerable<UserModel> GetAll()
         {
-            var user = _repository.UserRepository.GetAll();
+            var user = _repository.UserManager.Users;
             if (user.Count() == 0) throw new CardIndexException("Users  not found");
             var result = (from b in user
                           select _mapper.Map<User, UserModel>(b)).ToList();
@@ -62,7 +61,7 @@ namespace BLL.Services
 
         public IEnumerable<UserModel> GetUsersRole()
         {
-            var userrole = userManager.GetUsersInRoleAsync("RegisteredUser").Result;
+            var userrole = _repository.UserManager.GetUsersInRoleAsync("RegisteredUser").Result;
             var result = (from user in userrole
                           select _mapper.Map<User, UserModel>(user)).ToList();
             return result;
@@ -70,26 +69,26 @@ namespace BLL.Services
 
         public Task<UserModel> GetByIdAsync(long id)
         {
-            var result = _mapper.Map<User, UserModel>(_repository.UserRepository.GetByIdAsync(id).Result);
+            var result = _mapper.Map<User, UserModel>(_repository.UserManager.FindByIdAsync(id.ToString()).Result);
             if (result == null) throw new CardIndexException("User not found");
             return Task.FromResult<UserModel>(result);
         }
 
         public Task UpdateAsync(UserModel model)
         {
-            if(_repository.UserRepository.GetAll().FirstOrDefault(x=>x.Id==model.Id)==null) throw new CardIndexException("Users not found");
-            _repository.UserRepository.Update(_mapper.Map<User>(model));
+            if(_repository.UserManager.Users.FirstOrDefault(x=>x.Id==model.Id)==null) throw new CardIndexException("Users not found");
+            _repository.UserManager.UpdateAsync(_mapper.Map<User>(model));
             return _repository.SaveAsync();
         }
 
         public int Count()
         {
-            return _repository.UserRepository.GetAll().Count();
+            return _repository.UserManager.Users.Count();
         }
 
         public async Task<AuthenticationResult> Signup(SignupModel signup)
         {
-            if (userManager.Users.Any(x => x.Email == signup.Email))
+            if (_repository.UserManager.Users.Any(x => x.Email == signup.Email))
                 return new AuthenticationResult
                 {
                     Errors = new[] { "User already exist" }
@@ -105,11 +104,11 @@ namespace BLL.Services
                     Email = signup.Email
                 };
 
-                var user_result = await userManager.CreateAsync(user, signup.Password);
+                var user_result = await _repository.UserManager.CreateAsync(user, signup.Password);
                 if (user_result.Succeeded)
                 {
-                    var currentUser = await userManager.FindByNameAsync(user.UserName);
-                    await userManager.AddToRoleAsync(currentUser, "RegisteredUser");
+                    var currentUser = await _repository.UserManager.FindByNameAsync(user.UserName);
+                    await _repository.UserManager.AddToRoleAsync(currentUser, "RegisteredUser");
                 }
                 var result = GenerateAuthenticationResult(user);
                 return result;
@@ -128,7 +127,7 @@ namespace BLL.Services
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(jwtConfig.Secret);
-            var role = userManager.GetRolesAsync(user);
+            var role = _repository.UserManager.GetRolesAsync(user);
             IdentityOptions identityOptions = new IdentityOptions();
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -152,7 +151,7 @@ namespace BLL.Services
         }
         public AuthenticationResult Login(LoginModel login)
         {
-            var user = userManager.Users.First(x => x.Email == login.Email);
+            var user = _repository.UserManager.Users.First(x => x.Email == login.Email);
             if (user == null)
                 return new AuthenticationResult
                 {

@@ -1,11 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "JtkcSOPRR0v+evIRlMo5RF4RhW71Wd0UPfmx3ZrK/YuoCWAK/DPz2wQR/iopvSoUccrREHXvMyvtoFwZQjtI0Q==",
+  "dgSpecHash": "zBo4lQI+zN2H+eYj6+n3iBnVzWPxFY6lA1hN9i7z93O8w21fuaUfGJ2avmfyu0ttTZwlBEFoXgBfHy6+HW++zw==",
   "success": true,
   "projectFilePath": "D:\\study\\Epam\\Projects\\FinalTask\\CardIndex\\CardIndex\\PL.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\olha0\\.nuget\\packages\\automapper\\10.1.1\\automapper.10.1.1.nupkg.sha512",
+    "C:\\Users\\olha0\\.nuget\\packages\\bcrypt.net-next\\4.0.2\\bcrypt.net-next.4.0.2.nupkg.sha512",
     "C:\\Users\\olha0\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
+    "C:\\Users\\olha0\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\3.1.15\\microsoft.aspnetcore.authentication.jwtbearer.3.1.15.nupkg.sha512",
     "C:\\Users\\olha0\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\5.0.6\\microsoft.aspnetcore.cryptography.internal.5.0.6.nupkg.sha512",
     "C:\\Users\\olha0\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\5.0.6\\microsoft.aspnetcore.cryptography.keyderivation.5.0.6.nupkg.sha512",
     "C:\\Users\\olha0\\.nuget\\packages\\microsoft.aspnetcore.identity.entityframeworkcore\\5.0.6\\microsoft.aspnetcore.identity.entityframeworkcore.5.0.6.nupkg.sha512",

@@ -78,11 +78,11 @@ namespace PL.Controllers
         }
 
         [HttpPut("update")]
-        public async Task<ActionResult> Update(CategoryModel cardModel)
+        public async Task<ActionResult> Update(CategoryModel categoryModel)
         {
             try
             {
-                await _categoriesService.UpdateAsync(cardModel);
+                await _categoriesService.UpdateAsync(categoryModel);
                 return Ok();
             }
             catch (Exception ex)

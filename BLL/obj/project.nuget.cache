@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "Z1LIE7cgVqp3Lno00TKRWPZf7exyl6dQKb8pjryT0HkqizDMvwOezuHm0i56DpKijqPUaszG6FnT6YoIBdWSmg==",
+  "dgSpecHash": "c4mp2nHl4Q68w/XSAiYfkW9F2PWF31wLjBVSRDFEBbdFO06RCp7Qs52zpngn3xQDS7o1qR6EmuPkq6wdtFzLkg==",
   "success": true,
   "projectFilePath": "D:\\study\\Epam\\Projects\\FinalTask\\CardIndex\\BLL\\BLL.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\olha0\\.nuget\\packages\\automapper\\10.1.1\\automapper.10.1.1.nupkg.sha512",
+    "C:\\Users\\olha0\\.nuget\\packages\\bcrypt.net-next\\4.0.2\\bcrypt.net-next.4.0.2.nupkg.sha512",
     "C:\\Users\\olha0\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\5.0.6\\microsoft.aspnetcore.cryptography.internal.5.0.6.nupkg.sha512",
     "C:\\Users\\olha0\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\5.0.6\\microsoft.aspnetcore.cryptography.keyderivation.5.0.6.nupkg.sha512",
     "C:\\Users\\olha0\\.nuget\\packages\\microsoft.aspnetcore.identity.entityframeworkcore\\5.0.6\\microsoft.aspnetcore.identity.entityframeworkcore.5.0.6.nupkg.sha512",

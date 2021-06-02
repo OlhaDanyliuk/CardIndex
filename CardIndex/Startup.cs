@@ -1,9 +1,11 @@
 using AutoMapper;
 using BLL;
+using BLL.Configuration;
 using BLL.Interfaces;
 using BLL.Services;
 using DAL;
 using DAL.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -14,10 +16,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using PL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using JwtConfig = BLL.Configuration.JwtConfig;
 
 namespace CardIndex
 {
@@ -38,12 +45,36 @@ namespace CardIndex
                       .AddRoleManager<RoleManager<IdentityRole<long>>>()
                       .AddEntityFrameworkStores<CardDbContext>();
 
-            services.AddControllers();
+            services.AddControllers(); 
             services.AddDomainDataServices(Configuration.GetConnectionString("DefaultConnection"));
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new AutomapperProfile());
             });
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(jwt =>
+            {
+                var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
+
+                jwt.SaveToken = true;
+                jwt.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    RequireExpirationTime = false,
+                    ValidateLifetime = true
+                };
+            });
+            var jwtSettings = new JwtConfig();
+            Configuration.Bind(nameof(JwtConfig), jwtSettings);
+            services.AddSingleton(jwtSettings);
 
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
@@ -51,7 +82,40 @@ namespace CardIndex
             services.AddTransient<ICardScoreService, CardScoreService>();
             services.AddTransient<ICategoriesService, CategoriesService>();
             services.AddTransient<IUserService, UserService>();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "You api title", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
+                                  Enter 'Bearer' [space] and then your token in the text input below.
+                                  \r\n\r\nExample: 'Bearer 12345abcdef'",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                  {
+                    {
+                      new OpenApiSecurityScheme
+                      {
+                        Reference = new OpenApiReference
+                          {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                          },
+                          Scheme = "oauth2",
+                          Name = "Bearer",
+                          In = ParameterLocation.Header,
+
+                        },
+                        new List<string>()
+                      }
+                    });
+
+            });
             services.AddCors();
         }
 

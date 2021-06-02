@@ -62,7 +62,15 @@ namespace DAL.Repositories
 
         public void Update(Category entity)
         {
-            _dbContext.Categories.Update(entity);
+            var el = _dbContext.Categories.FirstOrDefault(x => x.Id == entity.Id);
+            foreach (var proptr in entity.GetType().GetProperties())
+            {
+                var value = proptr.GetValue(entity, null);
+                if (proptr.Name != "Id" && proptr.Name != "Cards" && value != proptr.GetValue(el, null))
+                    proptr.SetValue(el, value, null);
+
+            }
+            _dbContext.Entry(el).State = EntityState.Modified;
             _dbContext.SaveChanges();
         }
     }

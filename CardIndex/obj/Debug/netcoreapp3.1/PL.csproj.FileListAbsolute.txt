@@ -76,3 +76,5 @@ D:\study\Epam\Projects\FinalTask\CardIndex\CardIndex\bin\Debug\netcoreapp3.1\Swa
 D:\study\Epam\Projects\FinalTask\CardIndex\CardIndex\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerGen.dll
 D:\study\Epam\Projects\FinalTask\CardIndex\CardIndex\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerUI.dll
 D:\study\Epam\Projects\FinalTask\CardIndex\CardIndex\obj\Debug\netcoreapp3.1\PL.MvcApplicationPartsAssemblyInfo.cs
+D:\study\Epam\Projects\FinalTask\CardIndex\CardIndex\bin\Debug\netcoreapp3.1\BCrypt.Net-Next.dll
+D:\study\Epam\Projects\FinalTask\CardIndex\CardIndex\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll

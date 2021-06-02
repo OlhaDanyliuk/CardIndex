@@ -32,6 +32,19 @@ namespace PL.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("usersrole")]
+        public ActionResult<IEnumerable<UserModel>> GetUsersRole()
+        {
+            try
+            {
+                var result = _userService.GetUsersRole();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<CategoryModel>> GetById(int id)

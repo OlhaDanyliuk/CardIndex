@@ -60,6 +60,14 @@ namespace BLL.Services
             return result;
         }
 
+        public IEnumerable<UserModel> GetUsersRole()
+        {
+            var userrole = userManager.GetUsersInRoleAsync("RegisteredUser").Result;
+            var result = (from user in userrole
+                          select _mapper.Map<User, UserModel>(user)).ToList();
+            return result;
+        }
+
         public Task<UserModel> GetByIdAsync(long id)
         {
             var result = _mapper.Map<User, UserModel>(_repository.UserRepository.GetByIdAsync(id).Result);
@@ -100,7 +108,8 @@ namespace BLL.Services
                 var user_result = await userManager.CreateAsync(user, signup.Password);
                 if (user_result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(user, "RegisteredUser");
+                    var currentUser = await userManager.FindByNameAsync(user.UserName);
+                    await userManager.AddToRoleAsync(currentUser, "RegisteredUser");
                 }
                 var result = GenerateAuthenticationResult(user);
                 return result;

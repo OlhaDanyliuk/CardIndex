@@ -8,6 +8,5 @@ namespace DAL.Entities
 {
     public class User : IdentityUser<long>
     {
-        public long Id { get; set; }
     }
 }

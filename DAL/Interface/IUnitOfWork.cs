@@ -11,8 +11,6 @@ namespace DAL.Interface
     {
         ICardRepository CardRepository { get; }
         ICategoryRepository CategoryRepository { get; }
-        UserManager<User> UserManager { get; }
-        RoleManager<Role> RoleManager { get; }
         ICardScoreRepository CardScoreRepository { get; }
 
         Task<int> SaveAsync();

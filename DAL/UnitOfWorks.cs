@@ -28,10 +28,6 @@ namespace DAL
         public ICardScoreRepository CardScoreRepository =>cardScoreRepository = cardScoreRepository ?? new CardScoreRepository(_context);
         public IUserRepository UserRepository => userRepository = userRepository ?? new UserRepository(_context);
 
-        public UserManager<User> UserManager { get; }
-
-        public RoleManager<Role> RoleManager { get; }
-
         public Task<int> SaveAsync()
         {
             return _context.SaveChangesAsync();

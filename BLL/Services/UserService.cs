@@ -23,19 +23,22 @@ namespace BLL.Services
 
         private readonly IUnitOfWork _repository;
         private readonly IMapper _mapper;
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper, JwtConfig jwt)
+        private readonly UserManager<User> _userManager;
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper, JwtConfig jwt, UserManager<User> userManager)
         {
             _mapper = mapper;
             _repository = unitOfWork;
             jwtConfig = jwt;
+            _userManager = userManager;
         }
+
 
         public async Task AddAsync(UserModel model)
         {
             try
             {
                 User _model = _mapper.Map<User>(model);
-                await _repository.UserManager.CreateAsync(_model);
+                await _userManager.CreateAsync(_model);
                 await _repository.SaveAsync();
             }
             catch (Exception ex)
@@ -45,61 +48,59 @@ namespace BLL.Services
         }
         public async Task DeleteByIdAsync(long modelId)
         {
-            var user = _repository.UserManager.Users.FirstOrDefault(x => x.Id == modelId);
+            var user = _userManager.Users.FirstOrDefault(x => x.Id == modelId);
             if (user==null) throw new CardIndexException("User not found");
-            await _repository.UserManager.DeleteAsync(user);
+            await _userManager.DeleteAsync(user);
         }
 
         public IEnumerable<UserModel> GetAll()
         {
-            var user = _repository.UserManager.Users;
+            var user = _userManager.Users;
             if (user.Count() == 0) throw new CardIndexException("Users  not found");
             var result = (from b in user
                           select _mapper.Map<User, UserModel>(b)).ToList();
             return result;
         }
 
-<<<<<<< HEAD
         public IEnumerable<UserModel> GetUsersRole()
         {
-            var userrole = _repository.UserManager.GetUsersInRoleAsync("RegisteredUser").Result;
+            var userrole = _userManager.GetUsersInRoleAsync("RegisteredUser").Result;
             var result = (from user in userrole
                           select _mapper.Map<User, UserModel>(user)).ToList();
             return result;
         }
 
-=======
->>>>>>> parent of 7012d18 (fixed registration error with roles)
         public Task<UserModel> GetByIdAsync(long id)
         {
-            var result = _mapper.Map<User, UserModel>(_repository.UserManager.FindByIdAsync(id.ToString()).Result);
+            var result = _mapper.Map<User, UserModel>(_userManager.FindByIdAsync(id.ToString()).Result);
             if (result == null) throw new CardIndexException("User not found");
             return Task.FromResult<UserModel>(result);
         }
 
         public Task UpdateAsync(UserModel model)
         {
-            if(_repository.UserManager.Users.FirstOrDefault(x=>x.Id==model.Id)==null) throw new CardIndexException("Users not found");
-            _repository.UserManager.UpdateAsync(_mapper.Map<User>(model));
+            if(_userManager.Users.FirstOrDefault(x=>x.Id==model.Id)==null) throw new CardIndexException("Users not found");
+            _userManager.UpdateAsync(_mapper.Map<User>(model));
             return _repository.SaveAsync();
         }
 
         public int Count()
         {
-            return _repository.UserManager.Users.Count();
+            return _userManager.Users.Count();
         }
 
         public async Task<AuthenticationResult> Signup(SignupModel signup)
         {
-            if (_repository.UserManager.Users.Any(x => x.Email == signup.Email))
+            if (_userManager.Users.Any(x => x.Email == signup.Email))
                 return new AuthenticationResult
                 {
                     Errors = new[] { "User already exist" }
                 };
             try
             {
-                int salt = 12;
-                string passwordHash = BCrypt.Net.BCrypt.HashPassword(signup.Password, salt);
+
+                string mySalt = BCrypt.Net.BCrypt.GenerateSalt();
+                string passwordHash = BCrypt.Net.BCrypt.HashPassword(signup.Password, mySalt);
                 User user = new User
                 {
                     UserName = signup.UserName,
@@ -107,15 +108,11 @@ namespace BLL.Services
                     Email = signup.Email
                 };
 
-                var user_result = await _repository.UserManager.CreateAsync(user, signup.Password);
+                var user_result = await _userManager.CreateAsync(user, signup.Password);
                 if (user_result.Succeeded)
                 {
-<<<<<<< HEAD
-                    var currentUser = await _repository.UserManager.FindByNameAsync(user.UserName);
-                    await _repository.UserManager.AddToRoleAsync(currentUser, "RegisteredUser");
-=======
-                    await userManager.AddToRoleAsync(user, "RegisteredUser");
->>>>>>> parent of 7012d18 (fixed registration error with roles)
+                    var currentUser = await _userManager.FindByNameAsync(user.UserName);
+                    await _userManager.AddToRoleAsync(currentUser, "RegisteredUser");
                 }
                 var result = GenerateAuthenticationResult(user);
                 return result;
@@ -134,7 +131,7 @@ namespace BLL.Services
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(jwtConfig.Secret);
-            var role = _repository.UserManager.GetRolesAsync(user);
+            var role =_userManager.GetRolesAsync(user);
             IdentityOptions identityOptions = new IdentityOptions();
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -158,13 +155,14 @@ namespace BLL.Services
         }
         public AuthenticationResult Login(LoginModel login)
         {
-            var user = _repository.UserManager.Users.First(x => x.Email == login.Email);
+            var user =_userManager.Users.FirstOrDefault(x => x.Email == login.Email);
             if (user == null)
                 return new AuthenticationResult
                 {
                     Errors = new[] { "User not exist" }
                 };
-            bool verified = BCrypt.Net.BCrypt.Verify(login.Password, user.PasswordHash);
+
+            bool verified = BCrypt.Net.BCrypt.EnhancedVerify(login.Password, user.PasswordHash);
             if (!verified)
                 return new AuthenticationResult
                 {

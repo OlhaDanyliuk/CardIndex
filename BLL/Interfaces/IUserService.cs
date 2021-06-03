@@ -10,7 +10,10 @@ namespace BLL.Interfaces
     {
         Task<AuthenticationResult> Signup(SignupModel signup);
         AuthenticationResult Login(LoginModel signup);
+<<<<<<< HEAD
         IEnumerable<UserModel> GetUsersRole();
 
+=======
+>>>>>>> parent of 7012d18 (fixed registration error with roles)
     }
 }

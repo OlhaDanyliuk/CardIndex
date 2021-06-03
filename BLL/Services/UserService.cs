@@ -59,6 +59,7 @@ namespace BLL.Services
             return result;
         }
 
+<<<<<<< HEAD
         public IEnumerable<UserModel> GetUsersRole()
         {
             var userrole = _repository.UserManager.GetUsersInRoleAsync("RegisteredUser").Result;
@@ -67,6 +68,8 @@ namespace BLL.Services
             return result;
         }
 
+=======
+>>>>>>> parent of 7012d18 (fixed registration error with roles)
         public Task<UserModel> GetByIdAsync(long id)
         {
             var result = _mapper.Map<User, UserModel>(_repository.UserManager.FindByIdAsync(id.ToString()).Result);
@@ -107,8 +110,12 @@ namespace BLL.Services
                 var user_result = await _repository.UserManager.CreateAsync(user, signup.Password);
                 if (user_result.Succeeded)
                 {
+<<<<<<< HEAD
                     var currentUser = await _repository.UserManager.FindByNameAsync(user.UserName);
                     await _repository.UserManager.AddToRoleAsync(currentUser, "RegisteredUser");
+=======
+                    await userManager.AddToRoleAsync(user, "RegisteredUser");
+>>>>>>> parent of 7012d18 (fixed registration error with roles)
                 }
                 var result = GenerateAuthenticationResult(user);
                 return result;

@@ -79,6 +79,8 @@ namespace CardIndex
             services.AddTransient<ICardScoreService, CardScoreService>();
             services.AddTransient<ICategoriesService, CategoriesService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IRoleService, RoleService>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "You api title", Version = "v1" });
@@ -133,6 +135,10 @@ namespace CardIndex
                     c.InjectStylesheet("/swagger-ui/custom.css");
                 });
             }
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
             app.UseHttpsRedirection();
 

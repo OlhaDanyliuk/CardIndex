@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "KqHjAnGRnzPlX59GbZYFsA+oZG69fYt9p6oiTOxMkLXubv7ghyjIHNFwj4ON6FW2RBVLL8Y6jp6alwPr5vGY/w==",
+  "dgSpecHash": "tgQPgNcAxagwAuIfQ0dup/1Q4RLhsO1shCo6afATQuhIPCvvurrSkGJkpZRHUQzkKsm0BL/oPab2jUmxOis6xg==",
   "success": true,
   "projectFilePath": "D:\\study\\Epam\\Projects\\FinalTask\\CardIndex\\BLL\\BLL.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\olha0\\.nuget\\packages\\automapper\\10.1.1\\automapper.10.1.1.nupkg.sha512",
-    "C:\\Users\\olha0\\.nuget\\packages\\bcrypt.net-next\\4.0.2\\bcrypt.net-next.4.0.2.nupkg.sha512",
+    "C:\\Users\\olha0\\.nuget\\packages\\bcrypt.net-next\\3.5.0\\bcrypt.net-next.3.5.0.nupkg.sha512",
     "C:\\Users\\olha0\\.nuget\\packages\\microsoft.aspnetcore.authentication\\2.2.0\\microsoft.aspnetcore.authentication.2.2.0.nupkg.sha512",
     "C:\\Users\\olha0\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\olha0\\.nuget\\packages\\microsoft.aspnetcore.authentication.cookies\\2.2.0\\microsoft.aspnetcore.authentication.cookies.2.2.0.nupkg.sha512",

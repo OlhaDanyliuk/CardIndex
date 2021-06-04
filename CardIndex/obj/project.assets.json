@@ -15,13 +15,13 @@
           "lib/netstandard2.0/AutoMapper.dll": {}
         }
       },
-      "BCrypt.Net-Next/4.0.2": {
+      "BCrypt.Net-Next/3.5.0": {
         "type": "package",
         "compile": {
-          "lib/netcoreapp3.1/BCrypt.Net-Next.dll": {}
+          "lib/netstandard2.1/BCrypt.Net-Next.dll": {}
         },
         "runtime": {
-          "lib/netcoreapp3.1/BCrypt.Net-Next.dll": {}
+          "lib/netstandard2.1/BCrypt.Net-Next.dll": {}
         }
       },
       "Humanizer.Core/2.8.26": {
@@ -1988,7 +1988,7 @@
         "framework": ".NETCoreApp,Version=v3.1",
         "dependencies": {
           "AutoMapper": "10.1.1",
-          "BCrypt.Net-Next": "4.0.2",
+          "BCrypt.Net-Next": "3.5.0",
           "DAL": "1.0.0",
           "Microsoft.AspNetCore.Identity": "2.2.0"
         },
@@ -2033,14 +2033,14 @@
         "lib/netstandard2.0/AutoMapper.xml"
       ]
     },
-    "BCrypt.Net-Next/4.0.2": {
-      "sha512": "LyNKpIpr4GraRD9+xlTviyxxbZpF6J4xJf7DvraC1mR8PSN/KonGc4rt8C/fjkD3vaEvgA7BcvsbHFCOjgczyQ==",
+    "BCrypt.Net-Next/3.5.0": {
+      "sha512": "6DaFW42NhDA1/QDR6/8nyv04QBswBXEaCh0AXtm0kfbTTRFeMh7ROmlniqrVjP0Mpx4raGE+oWsy1f6IC/jWAQ==",
       "type": "package",
-      "path": "bcrypt.net-next/4.0.2",
+      "path": "bcrypt.net-next/3.5.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "bcrypt.net-next.4.0.2.nupkg.sha512",
+        "bcrypt.net-next.3.5.0.nupkg.sha512",
         "bcrypt.net-next.nuspec",
         "lib/net20/BCrypt.Net-Next.dll",
         "lib/net20/BCrypt.Net-Next.xml",
@@ -2056,10 +2056,6 @@
         "lib/net472/BCrypt.Net-Next.xml",
         "lib/net48/BCrypt.Net-Next.dll",
         "lib/net48/BCrypt.Net-Next.xml",
-        "lib/net5.0/BCrypt.Net-Next.dll",
-        "lib/net5.0/BCrypt.Net-Next.xml",
-        "lib/netcoreapp3.1/BCrypt.Net-Next.dll",
-        "lib/netcoreapp3.1/BCrypt.Net-Next.xml",
         "lib/netstandard2.0/BCrypt.Net-Next.dll",
         "lib/netstandard2.0/BCrypt.Net-Next.xml",
         "lib/netstandard2.1/BCrypt.Net-Next.dll",

@@ -20,11 +20,25 @@ namespace PL.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<UserModel>> GetAll()
+        public async Task<ActionResult<IEnumerable<UserModel>>> GetAll()
         {
             try
             {
-                var result = _userService.GetAll();
+                var result = await _userService.GetAllAsync();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("usersRole")]
+        public ActionResult<IEnumerable<UserModel>> GetUsersRole(string userRole)
+        {
+            try
+            {
+                var result = _userService.GetUsersRole(userRole);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -74,6 +88,35 @@ namespace PL.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut("changeUserRole")]
+        public async Task<ActionResult> ChangeUserRole(UserModel userModel)
+        {
+            try
+            {
+                await _userService.ChangeUserRole(userModel);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("removeUserRole")]
+        public async Task<ActionResult> RemoveUserRole(UserModel user)
+        {
+            try
+            {
+                await _userService.RemoveUserRole(user);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
         [HttpDelete("remove/{id}")]
         public async Task<ActionResult> Delete(int id)
         {

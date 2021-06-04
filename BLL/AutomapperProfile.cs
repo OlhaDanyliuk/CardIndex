@@ -29,6 +29,11 @@ namespace BLL
                .ForMember(p => p.Id, c => c.MapFrom(card => card.Id))
                .ReverseMap();
 
+            CreateMap<Role, UserRoleModel>()
+               .ForMember(p => p.Id, c => c.MapFrom(role => role.Id))
+               .ForMember(p => p.Role, c => c.MapFrom(role => role.Name))
+               .ReverseMap();
+
         }
     }
 }

@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "bV4ido2Hx8x3g7jVcSwn7kNTlY4xIWRxdO8wq3H3+tVmqeyeyhCNPdR3GdA97OYZ2F1PJdBXLWvK56z4de21bw==",
+  "dgSpecHash": "+CW5U23WZ/L7dFL1BXV/0VtvhCZu97RH99s+GjGE1V09Vfiz2OWt6IReP0lr6IWrV3wx4gzDg/5/Je5k1H59Mg==",
   "success": true,
   "projectFilePath": "D:\\study\\Epam\\Projects\\FinalTask\\CardIndex\\CardIndex\\PL.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\olha0\\.nuget\\packages\\automapper\\10.1.1\\automapper.10.1.1.nupkg.sha512",
-    "C:\\Users\\olha0\\.nuget\\packages\\bcrypt.net-next\\4.0.2\\bcrypt.net-next.4.0.2.nupkg.sha512",
+    "C:\\Users\\olha0\\.nuget\\packages\\bcrypt.net-next\\3.5.0\\bcrypt.net-next.3.5.0.nupkg.sha512",
     "C:\\Users\\olha0\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\olha0\\.nuget\\packages\\microsoft.aspnetcore.authentication\\2.2.0\\microsoft.aspnetcore.authentication.2.2.0.nupkg.sha512",
     "C:\\Users\\olha0\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",

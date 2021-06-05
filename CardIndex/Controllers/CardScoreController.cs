@@ -1,6 +1,6 @@
 ﻿using BLL.Interfaces;
 using BLL.Models;
-using BLL.Validation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,22 +11,24 @@ using System.Threading.Tasks;
 namespace PL.Controllers
 {
     [Produces("application/json")]
-    [Route("api/cards/")]
+    [Route("api/cardscore/")]
     [ApiController]
-    public class CardsController : Controller
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public class CardScoreController : Controller
     {
-        private readonly ICardService _cardService;
-        public CardsController(ICardService cardService)
+        private readonly ICardScoreService _cardScoreService;
+        public CardScoreController(ICardScoreService cardScoreService)
         {
-            _cardService = cardService;
+            _cardScoreService = cardScoreService;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<CardModel>> GetAll()
+        [Authorize(Roles = "Admin, Moderator")]
+        public ActionResult<IEnumerable<CardScoreModel>> GetAll()
         {
             try
             {
-                var result = _cardService.GetAll();
+                var result = _cardScoreService.GetAll();
                 return Ok(result);
             }
             catch (Exception ex)
@@ -36,11 +38,12 @@ namespace PL.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CardModel>> GetById(int id)
+        [Authorize(Roles = "Admin, Moderator")]
+        public async Task<ActionResult<CardScoreModel>> GetById(int id)
         {
             try
             {
-                var result = await _cardService.GetByIdAsync(id);
+                var result = await _cardScoreService.GetByIdAsync(id);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -51,12 +54,12 @@ namespace PL.Controllers
 
 
         [HttpPost("create")]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Add([FromBody] CardModel model)
+        [Authorize(Roles = "Moderator")]
+        public async Task<ActionResult> Add([FromBody] CardScoreModel model)
         {
             try
             {
-                await _cardService.AddAsync(model);
+                await _cardScoreService.AddAsync(model);
                 return CreatedAtAction(nameof(GetById), new { id = model.Id }, model);
             }
             catch (Exception ex)
@@ -66,12 +69,12 @@ namespace PL.Controllers
         }
 
         [HttpPut("update")]
-        [Authorize(Roles = "Admin, Moderator")]
-        public async Task<ActionResult> Update(CardModel cardModel)
+        [Authorize(Roles = "Moderator")]
+        public async Task<ActionResult> Update(CardScoreModel cardModel)
         {
             try
             {
-                await _cardService.UpdateAsync(cardModel);
+                await _cardScoreService.UpdateAsync(cardModel);
                 return Ok();
             }
             catch (Exception ex)
@@ -80,12 +83,12 @@ namespace PL.Controllers
             }
         }
         [HttpDelete("remove/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Moderator")]
         public async Task<ActionResult> Delete(int id)
         {
             try
             {
-                await _cardService.DeleteByIdAsync(id);
+                await _cardScoreService.DeleteByIdAsync(id);
                 return Ok();
             }
             catch (Exception ex)

@@ -1,5 +1,6 @@
 ﻿using BLL.Interfaces;
 using BLL.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,7 +13,7 @@ namespace PL.Controllers
     [Produces("application/json")]
     [Route("api/roles/")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class RoleController : Controller
     {
         private readonly IRoleService _roleService;
@@ -22,6 +23,7 @@ namespace PL.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, Moderator")]
         public ActionResult<IEnumerable<UserRoleModel>> GetAll()
         {
             try
@@ -36,6 +38,7 @@ namespace PL.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin, Moderator")]
         public async Task<ActionResult<UserRoleModel>> GetById(int id)
         {
             try
@@ -50,6 +53,7 @@ namespace PL.Controllers
         }
 
         [HttpPost("create")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Add([FromBody] UserRoleModel model)
         {
             try
@@ -64,6 +68,7 @@ namespace PL.Controllers
         }
 
         [HttpPut("update")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Update(UserRoleModel model)
         {
             try
@@ -77,6 +82,7 @@ namespace PL.Controllers
             }
         }
         [HttpDelete("remove/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(int id)
         {
             try

@@ -1,5 +1,6 @@
 ﻿using BLL.Interfaces;
 using BLL.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,8 @@ namespace PL.Controllers
         }
 
         [HttpGet]
+
+        [Authorize(Roles = "Admin, Moderator")]
         public async Task<ActionResult<IEnumerable<UserModel>>> GetAll()
         {
             try
@@ -34,6 +37,7 @@ namespace PL.Controllers
         }
 
         [HttpGet("usersRole")]
+        [Authorize(Roles = "Admin, Moderator")]
         public ActionResult<IEnumerable<UserModel>> GetUsersRole(string userRole)
         {
             try
@@ -48,6 +52,7 @@ namespace PL.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin, Moderator")]
         public async Task<ActionResult<CategoryModel>> GetById(int id)
         {
             try
@@ -62,6 +67,7 @@ namespace PL.Controllers
         }
 
         [HttpPost("create")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Add([FromBody] UserModel model)
         {
             try
@@ -76,6 +82,7 @@ namespace PL.Controllers
         }
 
         [HttpPut("update")]
+        [Authorize]
         public async Task<ActionResult> Update(UserModel userModel)
         {
             try
@@ -89,6 +96,7 @@ namespace PL.Controllers
             }
         }
         [HttpPut("changeUserRole")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> ChangeUserRole(UserModel userModel)
         {
             try
@@ -103,6 +111,7 @@ namespace PL.Controllers
         }
 
         [HttpPut("removeUserRole")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> RemoveUserRole(UserModel user)
         {
             try
@@ -118,6 +127,7 @@ namespace PL.Controllers
 
 
         [HttpDelete("remove/{id}")]
+        [Authorize]
         public async Task<ActionResult> Delete(int id)
         {
             try
@@ -137,7 +147,7 @@ namespace PL.Controllers
             {
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors.Select(x => x.ErrorMessage)));
             }
-            var authResponse = await _userService.Signup(userRegistration);
+            var authResponse = await _userService.SignupAsync(userRegistration);
             if (!authResponse.Success)
             {
                 return BadRequest(authResponse.Errors);
@@ -146,13 +156,13 @@ namespace PL.Controllers
         }
 
         [HttpPost("login")]
-        public ActionResult Login(LoginModel login)
+        public async Task<ActionResult> Login(LoginModel login)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors.Select(x => x.ErrorMessage)));
             }
-            var authResponse = _userService.Login(login);
+            var authResponse = await _userService.LoginAsync(login);
             if (!authResponse.Success)
             {
                 return BadRequest(authResponse.Errors);

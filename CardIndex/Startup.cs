@@ -73,15 +73,7 @@ namespace CardIndex
             Configuration.Bind(nameof(JwtConfig), jwtSettings);
             services.AddSingleton(jwtSettings);
 
-            IMapper mapper = mapperConfig.CreateMapper();
-            services.AddSingleton(mapper);
-            services.AddTransient<ICardService, CardService>();
-            services.AddTransient<ICardScoreService, CardScoreService>();
-            services.AddTransient<ICategoriesService, CategoriesService>();
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IRoleService, RoleService>();
-
-            services.AddSwaggerGen(c =>
+           services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "You api title", Version = "v1" });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -115,6 +107,16 @@ namespace CardIndex
                     });
 
             });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+            services.AddTransient<ICardService, CardService>();
+            services.AddTransient<ICardScoreService, CardScoreService>();
+            services.AddTransient<ICategoriesService, CategoriesService>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IRoleService, RoleService>();
+
+            services.AddHttpContextAccessor();
             services.AddCors();
         }
 

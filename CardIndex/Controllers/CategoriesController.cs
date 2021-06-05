@@ -1,6 +1,7 @@
 ﻿using BLL.Interfaces;
 using BLL.Models;
 using BLL.Validation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -64,6 +65,7 @@ namespace PL.Controllers
 
 
         [HttpPost("create")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Add([FromBody] CategoryModel model)
         {
             try
@@ -78,6 +80,7 @@ namespace PL.Controllers
         }
 
         [HttpPut("update")]
+        [Authorize(Roles = "Admin, Moderator")]
         public async Task<ActionResult> Update(CategoryModel categoryModel)
         {
             try
@@ -91,6 +94,7 @@ namespace PL.Controllers
             }
         }
         [HttpDelete("remove/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(int id)
         {
             try

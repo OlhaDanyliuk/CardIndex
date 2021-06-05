@@ -24,7 +24,6 @@ namespace BLL.Services
         private readonly IUnitOfWork _repository;
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
-        private const int salt = 12;
         public UserService(IUnitOfWork unitOfWork, IMapper mapper, JwtConfig jwt, UserManager<User> userManager)
         {
             _mapper = mapper;
@@ -94,7 +93,7 @@ namespace BLL.Services
             return _userManager.Users.Count();
         }
 
-        public async Task<AuthenticationResult> Signup(SignupModel signup)
+        public async Task<AuthenticationResult> SignupAsync(SignupModel signup)
         {
             if (_userManager.Users.Any(x => x.Email == signup.Email))
                 return new AuthenticationResult
@@ -103,11 +102,10 @@ namespace BLL.Services
                 };
             try
             {
-                string passwordHash = BCrypt.Net.BCrypt.HashPassword(signup.Password, salt);
                 User user = new User
                 {
                     UserName = signup.UserName,
-                    PasswordHash = passwordHash,
+                    PasswordHash = signup.Password,
                     Email = signup.Email
                 };
 
@@ -117,7 +115,7 @@ namespace BLL.Services
                     var currentUser = await _userManager.FindByNameAsync(user.UserName);
                     await _userManager.AddToRoleAsync(currentUser, "RegisteredUser");
                 }
-                var result = GenerateAuthenticationResult(user);
+                var result =await GenerateAuthenticationResultAsync(user);
                 return result;
             }
             catch (Exception ex)
@@ -129,12 +127,12 @@ namespace BLL.Services
             }
         }
 
-        private AuthenticationResult GenerateAuthenticationResult(User user)
+        private async Task<AuthenticationResult> GenerateAuthenticationResultAsync(User user)
         {
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(jwtConfig.Secret);
-            var role = _userManager.GetRolesAsync(user);
+            var role = await _userManager.GetRolesAsync(user);
             IdentityOptions identityOptions = new IdentityOptions();
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -142,7 +140,7 @@ namespace BLL.Services
                 {
                     new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                    new Claim(identityOptions.ClaimsIdentity.RoleClaimType, role.Result.FirstOrDefault())
+                    new Claim(identityOptions.ClaimsIdentity.RoleClaimType, role.FirstOrDefault())
                 }),
                 Expires = DateTime.UtcNow.AddHours(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -156,7 +154,7 @@ namespace BLL.Services
                 Token = tokenHandler.WriteToken(token)
             };
         }
-        public AuthenticationResult Login(LoginModel login)
+        public async Task<AuthenticationResult> LoginAsync(LoginModel login)
         {
             var user = _userManager.Users.SingleOrDefault(x => x.Email == login.Email);
             if (user == null)
@@ -165,14 +163,14 @@ namespace BLL.Services
                     Errors = new[] { "User not exist" }
                 };
 
-            string passwordHash = BCrypt.Net.BCrypt.HashPassword(login.Password, salt);
-            //bool verified = BCrypt.Net.BCrypt.Verify(login.Password, user.PasswordHash);
-            if (BCrypt.Net.BCrypt.Verify(user.PasswordHash, passwordHash))
+            var verified = _userManager.PasswordHasher.VerifyHashedPassword(user, user.PasswordHash, login.Password);
+            if (verified != PasswordVerificationResult.Success)
                 return new AuthenticationResult
                 {
                     Errors = new[] { "Invalid Password" }
                 };
-            return GenerateAuthenticationResult(user);
+            var result=await GenerateAuthenticationResultAsync(user);
+            return result;
         }
 
         public IEnumerable<UserModel> GetUsersRole(string userRole)
@@ -183,21 +181,26 @@ namespace BLL.Services
             return result;
         }
 
-        public async Task ChangeUserRole(UserModel user)
+        public async Task ChangeUserRole(UserModel userModel)
         {
-            if (_userManager.IsInRoleAsync(_mapper.Map<User>(user), user.Role).Result)
-                throw new CardIndexException($"User already is in role {user.Role}");
+            var user = _mapper.Map<User>(userModel);
+            if (_userManager.IsInRoleAsync(user, userModel.Role).Result)
+                throw new CardIndexException($"User already is in role {userModel.Role}");
 
-            var userRole = _userManager.FindByIdAsync(user.Id.ToString()).Result;
-            await _userManager.AddToRoleAsync(userRole, user.Role);
+            var userRole = _userManager.FindByIdAsync(userModel.Id.ToString()).Result;
+            var previousRole = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            if(previousRole!=null)
+                await _userManager.RemoveFromRoleAsync(user, previousRole);
+            await _userManager.AddToRoleAsync(userRole, userModel.Role);
         }
 
-        public async Task RemoveUserRole(UserModel user)
+        public async Task RemoveUserRole(UserModel userModel)
         {
-            if (!_userManager.IsInRoleAsync(_mapper.Map<User>(user), user.Role).Result)
-                throw new CardIndexException($"User already is in role {user.Role}");
+            var user = await _userManager.FindByIdAsync(userModel.Id.ToString());
+            if (!_userManager.IsInRoleAsync(user, userModel.Role).Result)
+                throw new CardIndexException($"User already is in role {userModel.Role}");
 
-            await _userManager.RemoveFromRoleAsync(_mapper.Map<User>(user), user.Role);
+            await _userManager.RemoveFromRoleAsync(user, userModel.Role);
         }
 
         public IEnumerable<UserModel> GetAll()

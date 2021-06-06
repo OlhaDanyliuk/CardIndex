@@ -1,5 +1,6 @@
 ﻿using BLL.Interfaces;
 using BLL.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,6 +13,7 @@ namespace PL.Controllers
     [Produces("application/json")]
     [Route("api/users/")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
@@ -141,6 +143,7 @@ namespace PL.Controllers
             }
         }
         [HttpPost("signup")]
+        [AllowAnonymous]
         public async Task<ActionResult> Register(SignupModel userRegistration)
         {
             if (!ModelState.IsValid)
@@ -156,6 +159,7 @@ namespace PL.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<ActionResult> Login(LoginModel login)
         {
             if (!ModelState.IsValid)

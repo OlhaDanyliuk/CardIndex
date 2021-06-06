@@ -20,8 +20,20 @@ namespace BLL.Services
         {
             _mapper = mapper;
             _repository = unitOfWork;
-        }
+            CalculateAverageScore();
 
+        }
+        
+        public void CalculateAverageScore()
+        {
+            foreach(var card in _repository.CardRepository.GetAll())
+            {
+                if (card.Assessment.Count != 0)
+                    card.AverageScore = Math.Round(card.Assessment.Select(x => x.Assessment).Average(),2);
+                else
+                    card.AverageScore = 0;
+            }
+        }
         public async Task AddAsync(CardModel model)
         {
             try { 

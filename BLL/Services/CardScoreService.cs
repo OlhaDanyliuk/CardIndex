@@ -20,7 +20,7 @@ namespace BLL.Services
         private readonly IUnitOfWork _repository;
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
-        private IHttpContextAccessor _httpContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         public CardScoreService(IUnitOfWork unitOfWork, IMapper mapper, UserManager<User> userManager, IHttpContextAccessor httpContextAccessor)
         {
             _mapper = mapper;
@@ -33,9 +33,15 @@ namespace BLL.Services
         {
             try
             {
-                CardScore _model = _mapper.Map<CardScore>(model);
-                var email = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x=>x.Type=="email").Value;
+                var email = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email).Value;
+                if (email == null) throw new CardIndexException("User not found");
                 var user = await _userManager.FindByEmailAsync(email);
+                if (!_userManager.IsInRoleAsync(user, "Moderator").Result) throw new CardIndexException("You do not have moderator rights");
+                CardScore _model = _mapper.Map<CardScore>(model);
+                _model.UserId = user.Id; 
+                if (_repository.CardScoreRepository.GetAll().FirstOrDefault(x => x.CardId == _model.CardId && x.UserId == _model.UserId) != null)
+                    throw new CardIndexException("You have already rated this card");
+
                 await _repository.CardScoreRepository.AddAsync(_model);
             }
             catch (Exception ex)
@@ -51,20 +57,22 @@ namespace BLL.Services
 
         public async Task DeleteByIdAsync(long modelId)
         {
-            if (_repository.CardScoreRepository.GetAll().Any(x => x.Id == modelId)) throw new CardIndexException();
+            if (_repository.CardScoreRepository.GetAll().FirstOrDefault(x => x.Id == modelId)==null) throw new CardIndexException("Card scores not found");
             await _repository.CardScoreRepository.DeleteByIdAsync(modelId);
         }
 
         public IEnumerable<CardScoreModel> GetAll()
         {
-            var cardScores = _repository.CardScoreRepository.GetAll();
-            var result = (from b in cardScores
+            var scores= _repository.CardScoreRepository.GetAll();
+            if (scores == null) throw new CardIndexException("Card scores not found");
+            var result = (from b in scores
                           select _mapper.Map<CardScore, CardScoreModel>(b)).ToList();
             return result;
         }
 
         public Task<CardScoreModel> GetByIdAsync(long id)
         {
+            if (_repository.CardScoreRepository.GetAll().FirstOrDefault(x => x.Id == id) == null) throw new CardIndexException("Card score not found");
             var result = _mapper.Map<CardScore, CardScoreModel>(_repository.CardScoreRepository.GetByIdAsync(id).Result);
             return Task.FromResult<CardScoreModel>(result);
         }

@@ -8,6 +8,7 @@ using DAL.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,7 @@ using PL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using JwtConfig = BLL.Configuration.JwtConfig;
@@ -114,9 +116,12 @@ namespace CardIndex
             services.AddTransient<ICardScoreService, CardScoreService>();
             services.AddTransient<ICategoriesService, CategoriesService>();
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IRoleService, RoleService>();
+            services.AddTransient<IRoleService, RoleService>(); 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddHttpContextAccessor();
+            services.AddTransient<IPrincipal>(provider => provider.GetService<IHttpContextAccessor>().HttpContext.User);
+
             services.AddCors();
         }
 

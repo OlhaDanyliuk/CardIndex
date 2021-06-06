@@ -178,6 +178,11 @@ namespace BLL.Services
             var userrole = _userManager.GetUsersInRoleAsync(userRole).Result;
             var result = (from user in userrole
                           select _mapper.Map<User, UserModel>(user)).ToList();
+            foreach(var u in result)
+            {
+                var role=  _userManager.GetRolesAsync(_mapper.Map<User>(u)).Result;
+                u.Role = role.First();
+            }
             return result;
         }
 
@@ -187,11 +192,11 @@ namespace BLL.Services
             if (_userManager.IsInRoleAsync(user, userModel.Role).Result)
                 throw new CardIndexException($"User already is in role {userModel.Role}");
 
-            var userRole = _userManager.FindByIdAsync(userModel.Id.ToString()).Result;
+            var _user = _userManager.FindByIdAsync(user.Id.ToString()).Result;
             var previousRole = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
             if(previousRole!=null)
-                await _userManager.RemoveFromRoleAsync(user, previousRole);
-            await _userManager.AddToRoleAsync(userRole, userModel.Role);
+                await _userManager.RemoveFromRoleAsync(_user, previousRole);
+            await _userManager.AddToRoleAsync(_user, userModel.Role);
         }
 
         public async Task RemoveUserRole(UserModel userModel)

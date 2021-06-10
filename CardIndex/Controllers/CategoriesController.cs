@@ -1,6 +1,7 @@
 ﻿using BLL.Interfaces;
 using BLL.Models;
 using BLL.Validation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,6 +14,7 @@ namespace PL.Controllers
     [Produces("application/json")]
     [Route("api/categories/")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class CategoriesController : Controller
     {
         private readonly ICategoriesService _categoriesService;
@@ -22,6 +24,8 @@ namespace PL.Controllers
         }
 
         [HttpGet]
+
+        [AllowAnonymous]
         public ActionResult<IEnumerable<CategoryModel>> GetAll()
         {
             try
@@ -36,6 +40,8 @@ namespace PL.Controllers
         }
 
         [HttpGet("{id}")]
+
+        [AllowAnonymous]
         public async Task<ActionResult<CategoryModel>> GetById(int id)
         {
             try
@@ -50,6 +56,7 @@ namespace PL.Controllers
         }
 
         [HttpGet("{id}/cards")]
+        [AllowAnonymous]
         public ActionResult<IEnumerable<CardModel>> GetCardsByCategoryId(int id)
         {
             try

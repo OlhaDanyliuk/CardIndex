@@ -37,7 +37,7 @@ namespace BLL.Services
         public async Task AddAsync(CardModel model)
         {
             try { 
-                Card _model = _mapper.Map< Card>(model);
+                Card _model = _mapper.Map<Card>(model);
                 _model.Category = _repository.CategoryRepository.GetByIdAsync(model.CategoryId).Result;
                 await _repository.CardRepository.AddAsync(_model);
                 await _repository.SaveAsync();

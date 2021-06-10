@@ -32,7 +32,6 @@
       "PL/1.0.0": {
         "dependencies": {
           "BLL": "1.0.0",
-          "DAL": "1.0.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "3.1.15",
           "Microsoft.EntityFrameworkCore": "5.0.6",
           "Microsoft.EntityFrameworkCore.Design": "5.0.6",

@@ -102,9 +102,6 @@
             "projectReferences": {
               "D:\\study\\Epam\\Projects\\FinalTask\\CardIndex\\BLL\\BLL.csproj": {
                 "projectPath": "D:\\study\\Epam\\Projects\\FinalTask\\CardIndex\\BLL\\BLL.csproj"
-              },
-              "D:\\study\\Epam\\Projects\\FinalTask\\CardIndex\\DAL\\DAL.csproj": {
-                "projectPath": "D:\\study\\Epam\\Projects\\FinalTask\\CardIndex\\DAL\\DAL.csproj"
               }
             }
           }

@@ -3,8 +3,6 @@ using BLL;
 using BLL.Configuration;
 using BLL.Interfaces;
 using BLL.Services;
-using DAL;
-using DAL.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

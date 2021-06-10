@@ -1,6 +1,7 @@
 ﻿using BLL.Interfaces;
 using BLL.Models;
 using BLL.Validation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,6 +14,8 @@ namespace PL.Controllers
     [Produces("application/json")]
     [Route("api/cards/")]
     [ApiController]
+
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class CardsController : Controller
     {
         private readonly ICardService _cardService;
@@ -22,6 +25,8 @@ namespace PL.Controllers
         }
 
         [HttpGet]
+
+        [AllowAnonymous]
         public ActionResult<IEnumerable<CardModel>> GetAll()
         {
             try
@@ -36,6 +41,8 @@ namespace PL.Controllers
         }
 
         [HttpGet("{id}")]
+
+        [AllowAnonymous]
         public async Task<ActionResult<CardModel>> GetById(int id)
         {
             try
@@ -52,6 +59,7 @@ namespace PL.Controllers
 
         [HttpPost("create")]
         [Authorize(Roles = "Admin")]
+
         public async Task<ActionResult> Add([FromBody] CardModel model)
         {
             try

@@ -171,6 +171,7 @@ namespace PL.Controllers
             {
                 return BadRequest(authResponse.Errors);
             }
+            
             return Ok(authResponse.Token);
 
         }
